@@ -12,7 +12,7 @@
         android:background="@drawable/box"
         android:gravity="center"
         android:layout_margin="2dp"
-        android:paddingVertical="30dp"
+        android:paddingVertical="25dp"
         android:text="10"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,10 +4,11 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Spinner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ku_calendar2.databinding.DateBinding
 
-class MyDataAdapter(val datas:ArrayList<MyData>): RecyclerView.Adapter<MyDataAdapter.ViewHolder>() {
+class MyDataAdapter(val datas:ArrayList<MyData>, val spinner:Spinner): RecyclerView.Adapter<MyDataAdapter.ViewHolder>() {
     interface OnClickListener{
         fun onItemClick(data: MyData, adapterPosition: Int)
         fun onButtonClick(data: MyData)
@@ -47,12 +48,11 @@ class MyDataAdapter(val datas:ArrayList<MyData>): RecyclerView.Adapter<MyDataAda
             false -> View.GONE
         }
 
-        if (datas[position].schedule != "")
-            holder.binding.textView1.setTextColor(Color.GREEN)
-        else
-            holder.binding.textView1.setTextColor(Color.GRAY)
-
-        if (datas[position].month == "8" || datas[position].month == "3")
-            holder.binding.textView1.setTextColor(Color.LTGRAY)
+        datas[position].color = when {
+            datas[position].month != spinner.selectedItem -> Color.LTGRAY
+            datas[position].schedule != "" -> Color.GREEN
+            else -> Color.BLACK
+        }
+        holder.binding.textView1.setTextColor(datas[position].color)
     }
 }
