@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -89,12 +88,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onButtonClick(data: MyData, adapterPosition: Int) {
+            override fun onButtonClick(data: MyData) {
+                val allDayMillis: Long = Calendar.getInstance().run {
+                    set(2023, data.month.toInt() - 1, data.date.toInt())
+                    timeInMillis
+                }
                 val intent = Intent(Intent.ACTION_INSERT)
-                    .setData(CONTENT_URI)
-                    .putExtra(TITLE, "${data.schedule}")
-
-                ContextCompat.startActivity(intent)
+                    .setData(CalendarContract.Events.CONTENT_URI)
+                    .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
+                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, allDayMillis)
+                    .putExtra(CalendarContract.Events.TITLE, data.schedule)
+                startActivity(intent)
+                Log.d("calendar intent", data.toString())
             }
         }
         binding.recyclerView.adapter = dataAdapter

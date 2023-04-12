@@ -1,23 +1,19 @@
 package com.example.ku_calendar2
 
-import android.content.Intent
 import android.graphics.Color
-import android.provider.CalendarContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ku_calendar2.databinding.DateBinding
 
 class MyDataAdapter(val datas:ArrayList<MyData>): RecyclerView.Adapter<MyDataAdapter.ViewHolder>() {
     interface OnClickListener{
         fun onItemClick(data: MyData, adapterPosition: Int)
-        fun onButtonClick(data: MyData, adapterPosition: Int)
+        fun onButtonClick(data: MyData)
     }
 
     var itemClickListener:OnClickListener?=null
-    var buttonClickListener:OnClickListener?=null
 
     inner class ViewHolder(val binding: DateBinding) : RecyclerView.ViewHolder(binding.root){
         init {
@@ -25,7 +21,7 @@ class MyDataAdapter(val datas:ArrayList<MyData>): RecyclerView.Adapter<MyDataAda
                 itemClickListener?.onItemClick(datas[adapterPosition], adapterPosition)
             }
             binding.button.setOnClickListener {
-                buttonClickListener?.onButtonClick(datas[adapterPosition], adapterPosition)
+                itemClickListener?.onButtonClick(datas[adapterPosition])
             }
         }
     }
