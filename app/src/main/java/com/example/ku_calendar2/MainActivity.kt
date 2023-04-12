@@ -1,12 +1,14 @@
 package com.example.ku_calendar2
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -62,9 +64,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun calculatePosition(month: String): Int {
-        return dates.indexOf("${month}_1")
-    }
+    fun calculatePosition(month: String) = dates.indexOf("${month}_1")
 
     fun initData() {
         val scan = Scanner(resources.openRawResource(R.raw.info))
@@ -81,12 +81,20 @@ class MainActivity : AppCompatActivity() {
     fun initRecyclerView() {
         binding.recyclerView.layoutManager = GridLayoutManager(this, 7)
         dataAdapter = MyDataAdapter(datas)
-        dataAdapter.itemClickListener = object : MyDataAdapter.OnItemClickListener {
+        dataAdapter.itemClickListener = object : MyDataAdapter.OnClickListener {
             override fun onItemClick(data: MyData, adapterPosition: Int) {
                 if (data.schedule != "") {
                     data.isOpen = !(data.isOpen)
                     dataAdapter.notifyItemRangeChanged(0, adapterPosition + 7)
                 }
+            }
+
+            override fun onButtonClick(data: MyData, adapterPosition: Int) {
+                val intent = Intent(Intent.ACTION_INSERT)
+                    .setData(CONTENT_URI)
+                    .putExtra(TITLE, "${data.schedule}")
+
+                ContextCompat.startActivity(intent)
             }
         }
         binding.recyclerView.adapter = dataAdapter
